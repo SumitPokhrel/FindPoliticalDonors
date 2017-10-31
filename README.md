@@ -1,3 +1,9 @@
+Dependencies: 
+import io
+from collections import defaultdict
+from numpy import median
+
+
 # Table of Contents
 1. [Introduction](README.md#introduction)
 2. [Challenge summary](README.md#challenge-summary)
