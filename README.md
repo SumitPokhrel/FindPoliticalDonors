@@ -1,7 +1,7 @@
-# Requires Python 2.7 and following dependencies:
-import io__
-from collections import defaultdict__
-from numpy import median__
+# Requires Python 2.7 and following dependencies:<br />
+import <br />
+from collections import defaultdict <br />
+from numpy import median
 
 
 # Table of Contents
