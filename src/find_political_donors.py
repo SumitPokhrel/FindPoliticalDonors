@@ -104,59 +104,59 @@ with io.open(sys.argv[1], 'r', encoding='latin-1') as infile:
                               list_of_CMTE_ID[noOfRowsForZip], list_of_ZIP_CODE[noOfRowsForZip]]) +'\n')
                 # Done with Running Median by Zip ======================================================================
 
-                # Median by Date =======================================================================================
-                if len(TRANSACTION_DT) == 8:  # should not be empty and malformed
-                    noOfRowsForDate += 1
+			# Median by Date =======================================================================================
+			if len(TRANSACTION_DT) == 8:  # should not be empty and malformed
+				noOfRowsForDate += 1
 
-                    # To yyyymmdd format from original mmddyyyy so that alphabetical sorting becomes easy
-                    TRANSACTION_DT = TRANSACTION_DT[4:8] + TRANSACTION_DT[0:2] + TRANSACTION_DT[2:4]
+				# To yyyymmdd format from original mmddyyyy so that alphabetical sorting becomes easy
+				TRANSACTION_DT = TRANSACTION_DT[4:8] + TRANSACTION_DT[0:2] + TRANSACTION_DT[2:4]
 
-                    # Appending the relevant data members in the list
-                    list_of_CMTE_ID_date.append(CMTE_ID)
-                    list_of_ZIP_CODE_date.append(ZIP_CODE)
-                    list_of_TRANSACTION_DT_date.append(TRANSACTION_DT)
-                    list_of_TRANSACTION_AMT_date.append(TRANSACTION_AMT)
+				# Appending the relevant data members in the list
+				list_of_CMTE_ID_date.append(CMTE_ID)
+				list_of_ZIP_CODE_date.append(ZIP_CODE)
+				list_of_TRANSACTION_DT_date.append(TRANSACTION_DT)
+				list_of_TRANSACTION_AMT_date.append(TRANSACTION_AMT)
 
-                    # Total number of transactions to a dictionary
-                    try:
-                        dictOfDateTotalNoOfTransaction[
-                            list_of_CMTE_ID_date[noOfRowsForDate], list_of_TRANSACTION_DT_date[noOfRowsForDate]] += 1
-                    except KeyError:
-                        dictOfDateTotalNoOfTransaction[
-                            list_of_CMTE_ID_date[noOfRowsForDate], list_of_TRANSACTION_DT_date[noOfRowsForDate]] = 1
+				# Total number of transactions to a dictionary
+				try:
+					dictOfDateTotalNoOfTransaction[
+						list_of_CMTE_ID_date[noOfRowsForDate], list_of_TRANSACTION_DT_date[noOfRowsForDate]] += 1
+				except KeyError:
+					dictOfDateTotalNoOfTransaction[
+						list_of_CMTE_ID_date[noOfRowsForDate], list_of_TRANSACTION_DT_date[noOfRowsForDate]] = 1
 
-                    # Transaction total amount to a dictionary
-                    # Also appending amounts for the  median
-                    try:
-                        dictOfDateTotalAmountOfTransaction[
-                            list_of_CMTE_ID_date[noOfRowsForDate], list_of_TRANSACTION_DT_date[noOfRowsForDate]] += int(
-                            list_of_TRANSACTION_AMT_date[noOfRowsForDate])
-                        dictOfDateForTransactionAmountMedian[
-                            list_of_CMTE_ID_date[noOfRowsForDate], list_of_TRANSACTION_DT_date[noOfRowsForDate]].append(int(
-                            list_of_TRANSACTION_AMT_date[noOfRowsForDate]))
+				# Transaction total amount to a dictionary
+				# Also appending amounts for the  median
+				try:
+					dictOfDateTotalAmountOfTransaction[
+						list_of_CMTE_ID_date[noOfRowsForDate], list_of_TRANSACTION_DT_date[noOfRowsForDate]] += int(
+						list_of_TRANSACTION_AMT_date[noOfRowsForDate])
+					dictOfDateForTransactionAmountMedian[
+						list_of_CMTE_ID_date[noOfRowsForDate], list_of_TRANSACTION_DT_date[noOfRowsForDate]].append(int(
+						list_of_TRANSACTION_AMT_date[noOfRowsForDate]))
 
-                    except KeyError:
-                        dictOfDateTotalAmountOfTransaction[
-                            list_of_CMTE_ID_date[noOfRowsForDate], list_of_TRANSACTION_DT_date[noOfRowsForDate]] = int(
-                            list_of_TRANSACTION_AMT_date[noOfRowsForDate])
-                        dictOfDateForTransactionAmountMedian[
-                            list_of_CMTE_ID_date[noOfRowsForDate], list_of_TRANSACTION_DT_date[noOfRowsForDate]].append(int(
-                            list_of_TRANSACTION_AMT_date[noOfRowsForDate]))
+				except KeyError:
+					dictOfDateTotalAmountOfTransaction[
+						list_of_CMTE_ID_date[noOfRowsForDate], list_of_TRANSACTION_DT_date[noOfRowsForDate]] = int(
+						list_of_TRANSACTION_AMT_date[noOfRowsForDate])
+					dictOfDateForTransactionAmountMedian[
+						list_of_CMTE_ID_date[noOfRowsForDate], list_of_TRANSACTION_DT_date[noOfRowsForDate]].append(int(
+						list_of_TRANSACTION_AMT_date[noOfRowsForDate]))
 
-    # Sorting, post processing, printing to check and writing to the file
-    # (k[0][0], k[0][1]) = recipient ID and date respectively, two keys of our dictionary
-    # k[1] = value of our dictionary
-    for key, value in sorted(dictOfDateTotalAmountOfTransaction.iteritems(), key=lambda k: (k[0][0], k[0][1])):
-        medianByDate = int(round(median(dictOfDateForTransactionAmountMedian[key])))
-        # Back to mmddyyyy  format from yyyymmdd which was done for sorting
-        date = key[1]  # since we cannot slice the tuple member
-        date = date[4:6] + date[6:8] + date[0:4]
-        #print key[0] + '|' + date + '|' + '|' + str(medianByDate) + '|' + str(dictOfDateTotalNoOfTransaction[key]) + '|' + str(value)
+# Sorting, post processing, printing to check and writing to the file
+# (k[0][0], k[0][1]) = recipient ID and date respectively, two keys of our dictionary
+# k[1] = value of our dictionary
+for key, value in sorted(dictOfDateTotalAmountOfTransaction.iteritems(), key=lambda k: (k[0][0], k[0][1])):
+	medianByDate = int(round(median(dictOfDateForTransactionAmountMedian[key])))
+	# Back to mmddyyyy  format from yyyymmdd which was done for sorting
+	date = key[1]  # since we cannot slice the tuple member
+	date = date[4:6] + date[6:8] + date[0:4]
+	#print key[0] + '|' + date + '|' + '|' + str(medianByDate) + '|' + str(dictOfDateTotalNoOfTransaction[key]) + '|' + str(value)
 
-        # Writing the results to the text file for medianvals_by_date.txt
-        my_file_date.write(key[0] + '|' + date + '|' + str(medianByDate) + '|' + str(dictOfDateTotalNoOfTransaction[key]) + '|' + str(value) + '\n')
-        # Done with Running Median by Date =============================================================================
-    print ('Done')
+	# Writing the results to the text file for medianvals_by_date.txt
+	my_file_date.write(key[0] + '|' + date + '|' + str(medianByDate) + '|' + str(dictOfDateTotalNoOfTransaction[key]) + '|' + str(value) + '\n')
+	# Done with Running Median by Date =============================================================================
+print ('Done')
 
 
 
