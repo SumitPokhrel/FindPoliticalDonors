@@ -1,3 +1,10 @@
+# Project Description and Algorithm 
+
+This program simulates a real-time platform that identifies and analyzes possible donors for upcoming election campaign. It: </br>
+
+Reads input file, parses through each line and reads relevant fields CMTE_ID, ZIP_CODE, TRANSACTION_DT, TRANSACTION_AMT and OTHER_ID. </br>
+In the orginal loop, it calculates running median, total dollar amount and total number of contributions by recipient and zip code. This is continuosly being logged in medianvals_by_zip.txt file. </br>
+In the same loop, it calculates total dollar amount and total number of contributions by recipient and date. Corresponding amount is being appended as a list. Since we have to calcualte just a median and not the running median in second case, after we are done with this loop, median is calcualted by recipient and date. This is logged in medianvals_by_date.txt file.</br>
 # Requires Python 2.7 and following dependencies:<br />
 import sys <br />
 import io <br />
