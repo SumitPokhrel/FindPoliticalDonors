@@ -1,4 +1,5 @@
 # Find Political Donors # 
+https://github.com/InsightDataScience/find-political-donors
 This program simulates a real-time platform that identifies and analyzes possible donors for upcoming election campaign. 
 # Data Structure # 
 The data structure used are lists and dictionaries. Key of our dictionary is a tuple - unique combination of CMTE_ID & ZIP_CODE and CMTE_ID & TRANSACTION_DATE. Value of our dictionary are running median/median, total dollar amount and total number of contributions.
