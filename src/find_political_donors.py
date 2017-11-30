@@ -3,6 +3,22 @@ import io
 from collections import defaultdict
 from numpy import median
 
+# Method to check if a given string can be casted to an integer
+def is_integer(myString):
+    try:
+        int(myString)
+        return True
+    except ValueError:
+        return False
+
+# Method to validate our date which is in mmddyyyy format
+def date_validate(myString):
+    if len(myString) == 8 and 0 < int(myString[0:2]) < 13 and 0 < int(myString[2:4]) < 32 and 0 < int(myString[4:8]) < 2019:
+        return True
+    else:
+        return False
+
+
 # Opening the file and parsing and splitting the data ------------------------------------------------------------------
 with io.open(sys.argv[1], 'r', encoding='latin-1') as infile:
     # We don't have to infile.close() using 'with'
@@ -14,8 +30,8 @@ with io.open(sys.argv[1], 'r', encoding='latin-1') as infile:
     noOfRowsForDate = -1
 
     # Opening files to write
-    my_file_zip = open(sys.argv[2], "w")
-    my_file_date = open(sys.argv[3], "w")
+    my_file_zip = open(sys.argv[2], 'w')
+    my_file_date = open(sys.argv[3], 'w')
 
     # Declare lists for Zip purpose
     list_of_CMTE_ID = []
@@ -51,7 +67,7 @@ with io.open(sys.argv[1], 'r', encoding='latin-1') as infile:
         TRANSACTION_AMT = splittedForm[14]
         OTHER_ID = splittedForm[15]
 
-        if OTHER_ID == '' and CMTE_ID != '' and TRANSACTION_AMT != '':
+        if OTHER_ID == '' and CMTE_ID != '' and TRANSACTION_AMT != '' and int(TRANSACTION_AMT) >= 0:
 
             # Running Median by Zip ====================================================================================
             if len(ZIP_CODE) >= 5:  # invalid if empty or less than 5 char
@@ -105,7 +121,7 @@ with io.open(sys.argv[1], 'r', encoding='latin-1') as infile:
                 # Done with Running Median by Zip ======================================================================
 
             # Median by Date =======================================================================================
-            if len(TRANSACTION_DT) == 8:  # should not be empty and malformed
+            if is_integer(TRANSACTION_DT) and date_validate(TRANSACTION_DT):  # should not be empty and malformed
                 noOfRowsForDate += 1
 
                 # To yyyymmdd format from original mmddyyyy so that alphabetical sorting becomes easy
@@ -151,44 +167,9 @@ with io.open(sys.argv[1], 'r', encoding='latin-1') as infile:
         # Back to mmddyyyy  format from yyyymmdd which was done for sorting
         date = key[1]  # since we cannot slice the tuple member
         date = date[4:6] + date[6:8] + date[0:4]
-        #print key[0] + '|' + date + '|' + '|' + str(medianByDate) + '|' + str(dictOfDateTotalNoOfTransaction[key]) + '|' + str(value)
+        # print key[0] + '|' + date + '|' + '|' + str(medianByDate) + '|' + str(dictOfDateTotalNoOfTransaction[key]) + '|' + str(value)
 
         # Writing the results to the text file for medianvals_by_date.txt
         my_file_date.write(key[0] + '|' + date + '|' + str(medianByDate) + '|' + str(dictOfDateTotalNoOfTransaction[key]) + '|' + str(value) + '\n')
         # Done with Running Median by Date =============================================================================
     print ('Done')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
